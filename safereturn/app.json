@@ -1,0 +1,74 @@
+{
+  "expo": {
+    "name": "safereturn",
+    "slug": "safereturn",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "scheme": "safereturn",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#061A40"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.safereturn.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "SafeReturn needs camera access to capture missing person photos for reports.",
+        "NSPhotoLibraryUsageDescription": "SafeReturn needs photo library access to upload missing person photos.",
+        "NSLocationWhenInUseUsageDescription": "SafeReturn needs your live location to add the last seen location in reports.",
+        "NSMicrophoneUsageDescription": "SafeReturn needs microphone access so you can ask the AI assistant using voice input."
+      }
+    },
+    "android": {
+      "package": "com.safereturn.app",
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#061A40"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "YOUR_GOOGLE_MAPS_API_KEY"
+        }
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow SafeReturn to access your photos so you can upload missing person photos.",
+          "cameraPermission": "Allow SafeReturn to use your camera so you can capture missing person photos."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow SafeReturn to use your location to attach live location to reports.",
+          "locationWhenInUsePermission": "Allow SafeReturn to use your location to attach live location to reports."
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow SafeReturn to access your microphone so you can use voice input in AI chat."
+        }
+      ]
+    ]
+  }
+}
