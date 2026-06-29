@@ -1,0 +1,64 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: safereturn_mysql
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"
+    volumes:
+      - safereturn_mysql_data:/var/lib/mysql
+    networks:
+      - safereturn_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./safereturn_backend
+      dockerfile: Dockerfile
+    container_name: safereturn_backend
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8090:8080"
+    volumes:
+      - ./safereturn_backend/uploads:/app/uploads
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - safereturn_network
+
+  frontend:
+    build:
+      context: ./safereturn
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+        REACT_APP_API_BASE_URL: ${REACT_APP_API_BASE_URL}
+    container_name: safereturn_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - safereturn_network
+
+volumes:
+  safereturn_mysql_data:
+
+networks:
+  safereturn_network:
+    driver: bridge
