@@ -20,6 +20,17 @@ services:
       timeout: 5s
       retries: 10
 
+  face-service:
+    build:
+      context: ./safereturnfaceservice
+      dockerfile: Dockerfile
+    container_name: safereturn_face_service
+    restart: always
+    ports:
+      - "8000:8000"
+    networks:
+      - safereturn_network
+
   backend:
     build:
       context: ./safereturn_backend
@@ -31,12 +42,12 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      face-service:
+        condition: service_started
     ports:
       - "8090:8080"
     volumes:
       - ./safereturn_backend/uploads:/app/uploads
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     networks:
       - safereturn_network
 
