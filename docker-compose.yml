@@ -45,7 +45,7 @@ services:
       face-service:
         condition: service_started
     ports:
-      - "8090:8080"
+      - "8080:8080"
     volumes:
       - ./safereturn_backend/uploads:/app/uploads
     networks:
