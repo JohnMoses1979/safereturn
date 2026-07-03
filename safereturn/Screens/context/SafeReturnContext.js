@@ -54,7 +54,11 @@ function getApiBaseUrl() {
   }
 
   if (Platform.OS === "web") {
-    return "http://localhost:8080";
+    const hostname = globalThis.location?.hostname;
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
+      return "http://localhost:8080";
+    }
+    return "";
   }
 
   if (Platform.OS === "android") {
