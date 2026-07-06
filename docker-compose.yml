@@ -50,6 +50,12 @@ services:
       - ./safereturn_backend/uploads:/app/uploads
     networks:
       - safereturn_network
+    healthcheck:
+      test: ["CMD-SHELL", "bash -ec '</dev/tcp/127.0.0.1/8080'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
 
   frontend:
     build:
@@ -62,7 +68,8 @@ services:
     container_name: safereturn_frontend
     restart: always
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     ports:
       - "80:80"
     networks:

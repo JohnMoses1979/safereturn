@@ -1,29 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // context/SafeReturnContext.js
 
 import React, {
@@ -44,6 +18,14 @@ const AUTH_TOKEN_KEY = "@safereturn/auth-token";
 
 // ─── Change this to your machine IP when testing on a physical device ─────────
 function getApiBaseUrl() {
+  if (Platform.OS === "web") {
+    const hostname = globalThis.location?.hostname;
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
+      return "http://localhost:8080";
+    }
+    return globalThis.location?.origin || "";
+  }
+
   const envUrl =
     process.env.EXPO_PUBLIC_API_BASE_URL ||
     process.env.EXPO_PUBLIC_API_URL ||
@@ -51,14 +33,6 @@ function getApiBaseUrl() {
 
   if (envUrl.trim()) {
     return envUrl.trim().replace(/\/+$/, "");
-  }
-
-  if (Platform.OS === "web") {
-    const hostname = globalThis.location?.hostname;
-    if (hostname === "localhost" || hostname === "127.0.0.1") {
-      return "http://localhost:8080";
-    }
-    return "";
   }
 
   if (Platform.OS === "android") {
@@ -845,54 +819,6 @@ export function SafeReturnProvider({ children }) {
   );
 
 
-  // ─── AI Face Match ────────────────────────────────────────────────────────────
-
-  // const faceMatchSearch = useCallback(async (localImageUri) => {
-  //   if (!authToken) throw new Error("Not authenticated. Please log in first.");
-  //   if (!localImageUri) throw new Error("No image provided.");
-
-  //   const filename = localImageUri.split("/").pop();
-  //   const ext = filename.split(".").pop().toLowerCase();
-  //   const mimeTypes = {
-  //     jpg: "image/jpeg",
-  //     jpeg: "image/jpeg",
-  //     png: "image/png",
-  //     webp: "image/webp",
-  //   };
-  //   const type = mimeTypes[ext] || "image/jpeg";
-
-  //   const formData = new FormData();
-  //   if (Platform.OS === "web") {
-  //     const res = await fetch(localImageUri);
-  //     const blob = await res.blob();
-  //     const file = new File([blob], filename, { type });
-  //     formData.append("photo", file);
-  //   } else {
-  //     formData.append("photo", { uri: localImageUri, name: filename, type });
-  //   }
-
-  //   let response;
-  //   try {
-  //     response = await fetch(`${API_BASE_URL}/api/face-match/search`, {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${authToken}`,
-  //         // Do NOT set Content-Type — fetch sets multipart boundary automatically
-  //       },
-  //       body: formData,
-  //     });
-  //   } catch {
-  //     throw new Error("Unable to reach the server. Please check your connection.");
-  //   }
-
-  //   if (!response.ok) {
-  //     const data = await readJsonResponse(response);
-  //     throw new Error(getFriendlyError(data, "Face match search failed.", response));
-  //   }
-
-  //   return await response.json();
-  // }, [authToken]);
-
   // ─── Alerts ───────────────────────────────────────────────────────────────────
 
   const markAlertsRead = useCallback(async () => {
@@ -1071,14 +997,6 @@ export function SafeReturnProvider({ children }) {
       return null;
     }
   }, [authToken]);
-
-
-  // Add these functions inside SafeReturnProvider, near the other API calls:
-
-  // ... inside the `value` useMemo object, add these:
-  // fetchPoliceStats,
-  // fetchPoliceReports,
-  // verifyPoliceReport,
 
   // ─── Context value ────────────────────────────────────────────────────────────
   const value = useMemo(

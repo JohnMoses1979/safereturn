@@ -8,7 +8,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_BASE_URL": "http://16.208.80.11:8080"
+        "EXPO_PUBLIC_API_BASE_URL": "http://16.208.80.11"
       }
     },
     "preview": {
@@ -17,13 +17,13 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_BASE_URL": "http://16.208.80.11:8080"
+        "EXPO_PUBLIC_API_BASE_URL": "http://16.208.80.11"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_API_BASE_URL": "http://16.208.80.11:8080"
+        "EXPO_PUBLIC_API_BASE_URL": "http://16.208.80.11"
       }
     }
   },
